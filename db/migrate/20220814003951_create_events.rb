@@ -7,7 +7,6 @@ class CreateEvents < ActiveRecord::Migration[6.1]
       t.datetime :end_date
       t.string :status
       t.references :user, null: false, foreign_key: true
-      t.integer :duration
       t.string :priority
 
       t.timestamps

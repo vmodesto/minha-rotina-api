@@ -1,0 +1,17 @@
+pt-BR:
+  activerecord:
+    errors:
+      models:
+        event:
+          attributes:
+            user:
+              required: 'Usuário inválido para o evento'
+      messages:
+        record_invalid: '%{errors}'
+  errors:
+    format: '%{message}'
+    messages:
+      blank: 'O atributo %{attribute} não pode ficar em branco'
+  devise:
+    failure:
+      unauthenticated: 'Usuário não autenticado'

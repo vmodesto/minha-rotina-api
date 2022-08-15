@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2022_08_14_003951) do
     t.datetime "end_date"
     t.string "status"
     t.integer "user_id", null: false
-    t.integer "duration"
     t.string "priority"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
