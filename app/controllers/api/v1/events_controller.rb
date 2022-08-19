@@ -6,15 +6,14 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def index
-    repository = Events::Repositories::EventsRepository.new
-    result = repository.get_by_start_date_and_user_id(start_date: start_date, user_id: user_id)
+    result = user_events_repository.get_by_start_date(start_date: start_date)
 
     render json: { result: result.map(&:to_hash) }, status: :ok
   end
 
   def create
-    use_case = Events::UseCases::CreateEvent.new
-    result = use_case.execute(user_id: user_id, event_params: event_params)
+    use_case = Events::UseCases::CreateEvent.new(user_id: user_id)
+    result = use_case.execute(event_params: event_params)
 
     render json: { result: result.to_hash }, status: :created
   rescue Events::Exceptions::InvalidEventException => error
@@ -22,8 +21,8 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def update
-    use_case = Events::UseCases::UpdateEvent.new
-    result = use_case.execute(user_id: user_id, event_params: event_params)
+    use_case = Events::UseCases::UpdateEvent.new(user_id: user_id)
+    result = use_case.execute(event_params: event_params)
 
     render json: { result: result.to_hash }, status: :ok
   rescue Events::Exceptions::InvalidEventException => error
@@ -31,13 +30,16 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def destroy
-    repository = Events::Repositories::EventsRepository.new
-    repository.delete_by_event_and_user_id(event_id: id, user_id: user_id)
+    user_events_repository.delete_by_id(id)
 
     head :no_content
   end
 
   private
+
+  def user_events_repository
+    Events::Repositories::UserEventsRepository.new(user_id: user_id)
+  end
 
   def event_params
     event_hash = params.require(:event).permit(
@@ -48,6 +50,7 @@ class Api::V1::EventsController < ApplicationController
       :end_date
     ).to_hash
 
+    event_hash.merge!(user_id: user_id)
     event_hash.merge!(id: id) if action_name.eql? "update"
 
     event_hash.with_indifferent_access

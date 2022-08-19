@@ -9,8 +9,8 @@ module Events
           id: event_hash[:id],
           title: event_hash[:title],
           description: event_hash[:description],
-          start_date: Time.zone.parse(event_hash[:start_date] || ""),
-          end_date: Time.zone.parse(event_hash[:end_date] || ""),
+          start_date: Time.zone.parse(event_hash[:start_date].to_s),
+          end_date: Time.zone.parse(event_hash[:end_date].to_s),
           priority: event_hash[:priority],
           status: event_hash[:status],
           user_id: event_hash[:user_id]

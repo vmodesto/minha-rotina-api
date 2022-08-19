@@ -1,29 +1,30 @@
 module Events
   module Repositories
-    class EventsRepository
-      def initialize(event_model: Event, event_factory: Events::Factories::EventFactory.new)
+    class UserEventsRepository
+      def initialize(user_id:, event_model: Event, event_factory: Events::Factories::EventFactory.new)
+        @user_id = user_id
         @event_model = event_model
         @event_factory = event_factory
       end
 
-      def find_by_event_and_user_id(event_id:, user_id:)
-        event_model = @event_model.find_by(id: event_id, user_id: user_id)
+      def find_by_id(event_id)
+        event_model = @event_model.find_by(id: event_id, user_id: @user_id)
 
         raise_event_not_found event_id unless event_model
 
         @event_factory.build_from_model event_model
       end
 
-      def get_by_start_date_and_user_id(start_date:, user_id:)
-        event_model_list = @event_model.by_start_date_and_user_id(start_date: start_date, user_id: user_id)
+      def get_by_start_date(start_date:)
+        event_model_list = @event_model.by_start_date_and_user_id(start_date: start_date, user_id: @user_id)
 
         return [] if event_model_list.empty?
 
         @event_factory.build_from_model_list event_model_list
       end
 
-      def delete_by_event_and_user_id(event_id:, user_id:)
-        event_model = @event_model.find_by(id: event_id, user_id: user_id)
+      def delete_by_id(event_id)
+        event_model = @event_model.find_by(id: event_id, user_id: @user_id)
 
         raise_event_not_found event_id unless event_model
 

@@ -1,13 +1,14 @@
 module Events
   module UseCases
     class UpdateEvent
-      def initialize(events_repository: Events::Repositories::EventsRepository.new, event_factory: Events::Factories::EventFactory.new)
+      def initialize(user_id:, events_repository: Events::Repositories::UserEventsRepository.new(user_id: user_id), event_factory: Events::Factories::EventFactory.new)
+        @user_id = user_id
         @events_repository = events_repository
         @event_factory = event_factory
       end
 
-      def execute(user_id:, event_params:)
-        event = @events_repository.find_by_event_and_user_id(event_id: event_params[:id], user_id: user_id)
+      def execute(event_params:)
+        event = @events_repository.find_by_id(event_params[:id])
         event_hash = event.to_hash
 
         event_params = self.map_params(event_hash, event_params)
