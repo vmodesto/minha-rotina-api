@@ -37,7 +37,8 @@ module Events
           status: @status,
           priority: @priority,
           duration: self.duration,
-          category_id: @category&.id
+          category_id: @category&.id,
+          category_name: self.category_name
         }
       end
     end
