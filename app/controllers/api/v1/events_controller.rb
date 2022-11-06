@@ -47,13 +47,19 @@ class Api::V1::EventsController < ApplicationController
       :description,
       :priority,
       :start_date,
-      :end_date
+      :end_date,
+      :event_category_id,
     ).to_hash
 
     event_hash.merge!(user_id: user_id)
+    event_hash.merge!(status: event_status)
     event_hash.merge!(id: id) if action_name.eql? "update"
 
     event_hash.with_indifferent_access
+  end
+
+  def event_status
+    params[:event][:status]
   end
 
   def user_id

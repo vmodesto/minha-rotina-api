@@ -40,6 +40,7 @@ module Events
         event_model.start_date = event.start_date
         event_model.end_date = event.end_date
         event_model.status = event.status
+        event_model.event_category_id = event.category.id
 
         event_model.save!
 

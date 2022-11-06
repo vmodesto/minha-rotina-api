@@ -1,6 +1,9 @@
 class Event < ApplicationRecord
   validates :title, :start_date, presence: true
   belongs_to :user
+  belongs_to :parent, class_name: "Event", optional: true
+  has_many :children, class_name: "Event", foreign_key: :parent_id
+  belongs_to :event_category
 
   enum priority: {normal: "normal", moderate: "moderate", urgent: "urgent"}, _default: "normal"
   enum status: {created: "created", progress: "progress", finished: "finished"}, _default: "created"

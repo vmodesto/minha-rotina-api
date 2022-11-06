@@ -4,6 +4,7 @@ module Events
 
       def build_from_hash(event_hash)
         event_hash = event_hash.with_indifferent_access
+        category = Events::Repositories::EventCategoriesRepository.build.get_by_id(id: event_hash[:event_category_id])
 
         Events::Domain::Event.new(
           id: event_hash[:id],
@@ -13,7 +14,8 @@ module Events
           end_date: Time.zone.parse(event_hash[:end_date].to_s),
           priority: event_hash[:priority],
           status: event_hash[:status],
-          user_id: event_hash[:user_id]
+          user_id: event_hash[:user_id],
+          category: category
         )
       end
 
@@ -30,7 +32,8 @@ module Events
           end_date: event_model.end_date,
           priority: event_model.priority,
           status: event_model.status,
-          user_id: event_model.user_id
+          user_id: event_model.user_id,
+          category: event_model.event_category
         )
       end
     end
